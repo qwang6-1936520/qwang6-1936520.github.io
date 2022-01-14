@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Robin's Website</title>
+        <link rel="stylesheet" type="text/css" href="anExternal.css">
+    </head>
+    <body>
+        <h1>Robin Wang</h1>
+        <h2 class="Floated">About Me (Floated right)</h2>
+        <p style="color:blue; font-family: courier;">I love running.</p>
+        <p style="color:purple; font-family: arial;">I love playing the piano.</p>
+        <p>I go to the University of Washington.</p>
+        <h2>My favorite websites</h2>
+        <ol>
+            <li>
+                <style> 
+                    li {
+                    position: relative;
+                    animation: mymove 5s infinite;
+                    }
+
+                    @keyframes mymove {
+                    from {left: 0px;}
+                    to {left: 200px;}
+                    }
+                </style>
+                <a href="https://www.google.com/">
+                    <p id = "Animation"> Picture resized to 50px by 50px with 20 pixel margins on each side, dotted border around text. Extra CSS effects added.</p>
+                    <img src = https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/d2abd662597191.5a9589b09ddf5.jpg
+                     title = "Google" style = "width:50px; height:50px; margin:20px; border-radius: 16px;">
+                    
+                </a>
+            </li>
+
+            <li>
+                <a href="https://www.bilibili.com/">
+                    <p>Picture resized to 50px by 50px. Border rounded.</p>
+                    <img src = https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/Bilibili_logo.svg/2880px-Bilibili_logo.svg.png
+                     title = "Bilibili" style = "width:50px; height:50px; margin:20px; border-radius: 66px;">
+                    
+                </a>
+            </li>
+        </ol>
+
+        <div class="Pic" style="text-align:center; float:center;">
+            <img src="https://jsis.washington.edu/africa/wp-content/uploads/sites/3/2019/11/uw-logo.png" 
+                title="Pic with centered text" style="align-self:center; margin: 20px;">
+            <div class="Centered" style="text-align:center; float:center;">
+                Text that is centered on a photo, inside a floated element.
+            </div>
+        </div>
+
+        <div class="Centered">
+            <img src="https://jsis.washington.edu/africa/wp-content/uploads/sites/3/2019/11/uw-logo.png" 
+                title ="UW" style="width:100px;height:100px;margin:20px;border-radius: 66px;">
+            <div class="Centered">Centered Text using external file.</div>
+        </div>
+
+    </body>
+
+</html>
