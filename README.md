@@ -6,8 +6,10 @@
 
 仓库已添加自动发布工作流：
 
-- 推送到 `main` 分支后会自动触发部署。
+- 推送到 `main` 或 `work` 分支后会自动触发部署。
 - 部署完成后访问：<https://qwang6-1936520.github.io/>
+
+> 如果你在 GitHub 上没看到 `.github/workflows/deploy-pages.yml`，通常是因为改动还在 `work` 分支，尚未合并到 `main`。请先发起 PR 并合并。
 
 ## 本地体验
 
