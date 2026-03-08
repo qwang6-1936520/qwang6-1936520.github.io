@@ -3,370 +3,247 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>凡人修仙传 · 文游仪表盘</title>
+  <title>凡人修仙传 · AI 动态文游</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --card: #1f2937;
-      --accent: #22d3ee;
-      --ok: #34d399;
-      --warn: #fbbf24;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --danger: #f87171;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-      color: var(--text);
-      background: radial-gradient(circle at top, #1e293b, var(--bg) 35%);
-    }
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 16px;
-    }
-    .panel {
-      background: rgba(17, 24, 39, 0.9);
-      border: 1px solid #334155;
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    }
-    .title {
-      margin: 0 0 12px;
-      font-size: 18px;
-      font-weight: 700;
-      color: #f8fafc;
-    }
-    .sub { color: var(--muted); font-size: 12px; margin-top: -8px; }
-    .stat-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .stat {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 10px;
-      border: 1px solid #374151;
-    }
-    .stat strong { display:block; color: #f3f4f6; }
-    .stat span { color: var(--muted); font-size: 12px; }
-    .bar {
-      height: 8px;
-      background: #334155;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-    .bar > i {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, #06b6d4, #3b82f6);
-    }
-    select, button {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #475569;
-      background: #0b1220;
-      color: var(--text);
-      margin-top: 8px;
-      cursor: pointer;
-    }
-    button:hover { border-color: var(--accent); }
-    button.secondary { background: #111827; }
-    button.danger { border-color: #7f1d1d; color: #fecaca; }
-    .layout-right {
-      display: grid;
-      gap: 16px;
-      grid-template-rows: auto auto 1fr;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid #374151;
-      border-radius: 10px;
-      padding: 10px;
-      min-height: 105px;
-    }
-    .card h4 { margin: 0 0 6px; }
-    .card p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
-    #actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .log {
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 10px;
-      padding: 12px;
-      height: 360px;
-      overflow: auto;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-    .log p { margin: 0 0 8px; }
-    .tag { font-size: 12px; color: var(--warn); }
-    .save-item {
-      background: #0b1220;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 8px;
-      margin-top: 8px;
-      font-size: 12px;
-    }
-    .save-item button { margin-top: 6px; padding: 6px; font-size: 12px; }
-    @media (max-width: 980px) {
-      .wrap { grid-template-columns: 1fr; }
-      .cards { grid-template-columns: 1fr; }
-      #actions { grid-template-columns: 1fr; }
-    }
+    :root{--bg:#0f172a;--panel:#111827;--card:#1f2937;--line:#334155;--accent:#22d3ee;--text:#e5e7eb;--muted:#94a3b8;--warn:#fbbf24;--ok:#34d399;--bad:#f87171}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#1e293b,var(--bg) 40%);font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:var(--text)}
+    .wrap{max-width:1320px;margin:0 auto;padding:18px;display:grid;grid-template-columns:380px 1fr;gap:14px}.panel{background:rgba(17,24,39,.95);border:1px solid var(--line);border-radius:12px;padding:12px}
+    .title{margin:0 0 10px;font-size:18px}.sub{color:var(--muted);font-size:12px;margin-bottom:8px}.mini{font-size:12px;color:var(--muted)}
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:var(--card);border:1px solid #374151;border-radius:10px;padding:8px}.stat strong{display:block}.stat span{font-size:12px;color:var(--muted)}
+    .bar{height:8px;margin-top:6px;border-radius:99px;background:#334155;overflow:hidden}.bar i{display:block;height:100%;width:0}.hp i{background:linear-gradient(90deg,#ef4444,#f97316)}.mp i{background:linear-gradient(90deg,#60a5fa,#2563eb)}.xp i{background:linear-gradient(90deg,#06b6d4,#3b82f6)}
+    input,select,textarea,button{width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid #475569;background:#0b1220;color:var(--text)}button{cursor:pointer}button:hover{border-color:var(--accent)}textarea{min-height:90px;resize:vertical}
+    .layout-right{display:grid;gap:14px;grid-template-rows:auto auto auto 1fr}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.card{background:var(--card);border:1px solid #374151;border-radius:10px;padding:10px}.card p{color:var(--muted);font-size:13px;line-height:1.45;margin:0}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.log{height:360px;overflow:auto;background:#020617;border:1px solid #1e293b;border-radius:10px;padding:10px}.log p{margin:0 0 8px;font-size:13px;line-height:1.55}.tag{color:var(--warn);font-size:12px}
+    .event-box{border:1px solid #7c2d12;background:#1c1917;border-radius:10px;padding:10px}.badge{font-size:12px;color:var(--ok)}.save-item{border:1px solid var(--line);border-radius:10px;padding:8px;margin-top:8px;background:#0b1220;font-size:12px}
+    .skills{margin-top:10px}.skill-item{border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:8px;background:#0b1220}.skill-item h4{margin:0 0 4px;font-size:14px}.skill-item p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}
+    .lock{color:var(--bad)}
+    @media (max-width:1020px){.wrap{grid-template-columns:1fr}.cards,.row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <aside class="panel">
-      <h2 class="title">韩立角色卡</h2>
-      <div class="sub">仅通过“修炼功法”提升修为，其他行为只提供辅助资源。</div>
-      <div class="stat-grid">
-        <div class="stat"><strong id="realm">凡人</strong><span>当前境界</span></div>
-        <div class="stat"><strong id="gongfa">长春功</strong><span>主修功法</span></div>
-        <div class="stat"><strong id="spiritStone">0</strong><span>灵石</span></div>
-        <div class="stat"><strong id="magicTreasure">无</strong><span>法宝</span></div>
+<div class="wrap">
+  <aside class="panel">
+    <h2 class="title">韩立角色卡</h2>
+    <div class="sub">仅“修炼功法”提升修为。战斗/施法扣减气血法力；每回合固定恢复总量 5%。</div>
+
+    <div class="stat-grid">
+      <div class="stat"><strong id="realm">凡人</strong><span>境界</span></div>
+      <div class="stat"><strong id="gongfa">长春功</strong><span>当前主修</span></div>
+      <div class="stat"><strong id="atk">0</strong><span>攻击</span></div>
+      <div class="stat"><strong id="def">0</strong><span>防御</span></div>
+      <div class="stat"><strong id="spd">0</strong><span>速度</span></div>
+      <div class="stat"><strong id="luck">0</strong><span>气运</span></div>
+    </div>
+    <div class="stat" style="margin-top:8px"><strong>气血 <span id="hpText">0/0</span></strong><div class="bar hp"><i id="hpBar"></i></div></div>
+    <div class="stat" style="margin-top:8px"><strong>法力 <span id="mpText">0/0</span></strong><div class="bar mp"><i id="mpBar"></i></div></div>
+    <div class="stat" style="margin-top:8px"><strong>功法进度 <span id="xpText">0/100</span></strong><div class="bar xp"><i id="xpBar"></i></div></div>
+
+    <h3 class="title" style="margin-top:12px">起始节点</h3>
+    <select id="startSelect"></select>
+    <button id="startBtn">开始新周目（加载剧情钩子）</button>
+
+    <details class="skills" open>
+      <summary>韩立功法总表（人界篇：炼气→化神，可展开/收起）</summary>
+      <div class="mini">高于当前修为的功法会锁定，并提示需要突破境界。功法可逐级修炼，遇到瓶颈需先突破修为。</div>
+      <div id="skillList"></div>
+    </details>
+
+    <h3 class="title" style="margin-top:12px">AI引擎设置</h3>
+    <input id="apiBase" placeholder="API Base，例如 https://api.openai.com/v1" />
+    <input id="apiKey" type="password" placeholder="API Key（仅本地浏览器保存）" />
+    <input id="apiModel" placeholder="模型名，例如 gpt-4.1-mini" />
+    <button id="saveApiBtn">保存 API 设置</button>
+
+    <h3 class="title" style="margin-top:12px">存档管理</h3>
+    <button id="saveBtn">保存当前进度</button>
+    <button id="refreshSaveBtn">刷新存档列表</button>
+    <div id="saveList"></div>
+  </aside>
+
+  <main class="layout-right">
+    <section class="panel">
+      <h2 class="title">剧情总览仪表盘</h2>
+      <div class="cards">
+        <article class="card"><h4>节点</h4><p id="stageName">-</p></article>
+        <article class="card"><h4>当前世界要闻</h4><p id="worldHeadline">-</p></article>
+        <article class="card"><h4>重要人物</h4><p id="npcSummary">-</p></article>
       </div>
-      <div class="stat" style="margin-top:10px;">
-        <strong>功法进度：<span id="xpText">0 / 100</span></strong>
-        <div class="bar"><i id="xpBar"></i></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="title">剧情钩子与决策</h2>
+      <p id="hookText" class="sub">请选择起始节点后生成剧情钩子。</p>
+      <textarea id="decisionInput" placeholder="输入你要让韩立执行的自定义决策"></textarea>
+      <div class="row">
+        <button id="decisionBtn">提交决策（AI剧情）</button>
+        <button id="cultivateBtn">修炼主修功法（提升修为）</button>
       </div>
-      <h3 class="title" style="margin-top:16px;">起始节点</h3>
-      <select id="startSelect"></select>
-      <button id="startBtn">以该节点开始新周目</button>
-      <h3 class="title" style="margin-top:16px;">存档管理</h3>
-      <button id="saveBtn">保存当前进度</button>
-      <button id="refreshSaveBtn" class="secondary">刷新存档列表</button>
-      <div id="saveList"></div>
-    </aside>
+      <div class="row">
+        <button id="missionBtn">执行任务（战斗/资源）</button>
+        <button id="prepareBtn">布置阵法符箓（辅助）</button>
+      </div>
+    </section>
 
-    <main class="layout-right">
-      <section class="panel">
-        <h2 class="title">剧情总览仪表盘</h2>
-        <div class="cards">
-          <article class="card">
-            <h4>当前阶段</h4>
-            <p id="stageName">-</p>
-          </article>
-          <article class="card">
-            <h4>关键任务</h4>
-            <p id="quest">-</p>
-          </article>
-          <article class="card">
-            <h4>辅助资源</h4>
-            <p id="toolSummary">灵石、阵法、符箓都可提高修炼效率，但不能直接涨修为。</p>
-          </article>
+    <section class="panel">
+      <h2 class="title">世界重大更新（每 3~10 分钟）</h2>
+      <div class="event-box">
+        <p id="worldEventText">暂无世界更新。</p>
+        <div class="row">
+          <button id="ignoreEventBtn">忽视更新</button>
+          <button id="joinEventBtn">一探究竟（开启小副本）</button>
         </div>
-      </section>
+        <div class="badge" id="nextTick">下一次世界变动倒计时：未开始</div>
+      </div>
+    </section>
 
-      <section class="panel">
-        <h2 class="title">行动决策</h2>
-        <div id="actions"></div>
-      </section>
+    <section class="panel">
+      <h2 class="title">故事日志</h2>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+</div>
 
-      <section class="panel">
-        <h2 class="title">故事与战报日志</h2>
-        <div class="log" id="log"></div>
-      </section>
-    </main>
-  </div>
+<script>
+const REALMS=["凡人","炼气初期","炼气中期","炼气后期","筑基初期","筑基中期","筑基后期","结丹初期","结丹中期","结丹后期","元婴初期","元婴中期","元婴后期","化神初期"];
 
-  <script>
-    const STAGES = [
-      { id: 0, name: "小说最开头", story: "七玄门外门弟子韩立，资质平平，却意外踏入修仙路。", quest: "在凡俗夹缝中求生，寻找入道机缘。", bonus: { spiritStone: 5, talisman: 1 } },
-      { id: 1, name: "韩立打败莫大夫", story: "韩立识破莫大夫阴谋，保住性命并接触修仙残卷。", quest: "消化战果，稳住心性，建立谨慎处世原则。", bonus: { spiritStone: 20, formation: 1 } },
-      { id: 2, name: "韩立初入黄枫谷", story: "黄枫谷内门竞争激烈，韩立一面低调，一面暗中积蓄。", quest: "巩固炼气根基，搜集丹药与符箓。", bonus: { spiritStone: 50, talisman: 3 } },
-      { id: 3, name: "韩立从天南传送至乱星海", story: "空间传送后举目无亲，乱星海强者如云。", quest: "立足乱星海，寻找长期修炼据点。", bonus: { spiritStone: 90, magicTreasure: "青竹蜂云剑雏形" } },
-      { id: 4, name: "韩立从乱星海传送至阴冥之地", story: "阴冥之地危机四伏，鬼物横行，资源与风险并存。", quest: "保命优先，借险地磨炼神识与心境。", bonus: { spiritStone: 120, formation: 2 } },
-      { id: 5, name: "韩立从阴冥之地回到天南", story: "重返天南，韩立见识已非昔日可比。", quest: "整合旧识与新资源，规划更高境界突破。", bonus: { spiritStone: 150, talisman: 4 } },
-      { id: 6, name: "韩立初次加入落云宗", story: "落云宗内卧虎藏龙，韩立再次以谨慎姿态潜行。", quest: "谋求宗门资源，冲击结丹后期。", bonus: { spiritStone: 180, magicTreasure: "辟邪神雷符阵" } }
-    ];
+const STAGES=[
+{id:0,name:"小说中最最开头",quest:"七玄门夹缝求生",world:"镜州武林暗流涌动，七玄门与野狼帮冲突升级。",npcs:["墨大夫","张铁","厉飞雨"],hook:"夜巡名单异常，你是否借机潜入药园查验灵药？"},
+{id:1,name:"韩立打败莫大夫",quest:"处理后患并隐藏线索",world:"七玄门高层换血，墨府旧案被追查。",npcs:["墨彩环","余子童","厉飞雨"],hook:"嘉元城外遗迹疑有散修集结，你立刻前往还是先抹去痕迹？"},
+{id:2,name:"韩立初入黄枫谷",quest:"低调立足宗门",world:"越国七派表面平静，魔道边境试探。",npcs:["李化元","董萱儿","陈巧倩"],hook:"外务采药与黑市符箓交易同时出现机会，你如何取舍？"},
+{id:3,name:"韩立从天南被传送至乱星海",quest:"建立据点",world:"乱星海势力割据，情报战升温。",npcs:["极阴祖师（元婴初期）","青易居士（元婴初期散修）","紫灵"],hook:"虚天殿前兆出现，青易居士在收购破禁材料，你是否接触？"},
+{id:4,name:"韩立从乱星海被传送至阴冥之地",quest:"保命并寻回归路径",world:"阴冥鬼雾扩散，外来修士失踪激增。",npcs:["元瑶","妍丽","鬼王级阴灵"],hook:"古修洞府疑似开启，你布阵侦查还是伪装混入？"},
+{id:5,name:"韩立从阴冥之地被传送回天南",quest:"重建人脉并规避旧敌",world:"天南势力洗牌，宗门互相试探底线。",npcs:["南宫婉","令狐老祖","魔道探子"],hook:"发现高价值灵脉线索，你独占还是借宗门掩护？"},
+{id:6,name:"韩立初次加入落云宗",quest:"借宗门资源稳步进阶",world:"溪国三宗牵制，边境冲突频发。",npcs:["向之礼","吕洛","慕兰法士前哨"],hook:"边境巡查令与失窃阵盘悬赏并发，你是否双线并进？"}
+];
 
-    const REALMS = ["凡人", "炼气初期", "炼气中期", "炼气后期", "筑基初期", "筑基中期", "筑基后期", "结丹初期", "结丹中期", "结丹后期", "元婴初期"];
+const HANLI_GONGFA=[
+{name:"长春功",phase:"炼气期",detail:"早期入门主修，稳固根基。",maxLevel:6,baseRealm:1,mana:16,xp:14,levelReq:{2:2,3:3,4:4,5:5,6:6}},
+{name:"敛息术",phase:"炼气期",detail:"隐匿修为与气息，韩立常用保命术。",maxLevel:5,baseRealm:1,mana:12,xp:10,levelReq:{2:2,3:4,4:6,5:7}},
+{name:"罗烟步",phase:"筑基期",detail:"身法步法，提升速度与脱战能力。",maxLevel:5,baseRealm:4,mana:20,xp:12,levelReq:{2:5,3:6,4:7,5:8}},
+{name:"青元剑诀",phase:"筑基期→元婴期",detail:"韩立核心攻伐体系之一。",maxLevel:9,baseRealm:4,mana:34,xp:20,levelReq:{2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12}},
+{name:"三转重元功",phase:"结丹期",detail:"为冲关蓄力、重炼法力所用。",maxLevel:6,baseRealm:7,mana:45,xp:22,levelReq:{2:8,3:9,4:10,5:11,6:12}},
+{name:"大衍诀",phase:"结丹期→元婴期",detail:"神识秘术，提升神识强度与操控。",maxLevel:6,baseRealm:7,mana:42,xp:24,levelReq:{2:8,3:8,4:8,5:9,6:11},specialGate:{from:4,to:5,needRealm:9,msg:"大衍诀 Level 4 → 5 需突破至结丹后期"}},
+{name:"血影遁",phase:"结丹期",detail:"极限遁术，代价较高。",maxLevel:4,baseRealm:8,mana:55,xp:18,levelReq:{2:9,3:10,4:11}},
+{name:"傀儡术/炼傀法",phase:"结丹期",detail:"用于外道战力与侦查。",maxLevel:5,baseRealm:8,mana:40,xp:16,levelReq:{2:8,3:9,4:10,5:11}},
+{name:"梵圣真魔功（残卷研修）",phase:"元婴期",detail:"高阶体法兼修体系，前期仅能研修残篇。",maxLevel:4,baseRealm:10,mana:68,xp:28,levelReq:{2:11,3:12,4:13}},
+{name:"元磁神光",phase:"化神期",detail:"人界后段顶级手段，需极高修为支撑。",maxLevel:3,baseRealm:13,mana:90,xp:36,levelReq:{2:13,3:13}}
+].map(x=>({...x,level:0}));
 
-    const ACTIONS = [
-      { id: "cultivate", label: "修炼主修功法", desc: "唯一能直接提升修为等级的行动。", run: (s) => {
-          const speed = 10 + s.tools.talisman * 2 + s.tools.formation * 3;
-          s.xp += speed;
-          s.time += 1;
-          addLog(`你闭关运转${s.mainGongfa}，吸纳灵气，功法熟练度 +${speed}。`, "修炼");
-          realmCheck(s);
-        }
-      },
-      { id: "mission", label: "执行宗门任务", desc: "获取灵石与材料，不直接加修为。", run: (s) => {
-          const gain = 25 + Math.floor(Math.random() * 25);
-          s.spiritStone += gain;
-          s.time += 1;
-          addLog(`你完成了一项高风险任务，获得灵石 ${gain} 枚。修为未直接变化。`, "任务");
-        }
-      },
-      { id: "treasure", label: "搜寻法宝", desc: "有概率得到法宝，提高后续收益。", run: (s) => {
-          const pool = ["青凝镜", "乌龙夺", "金蚨子母刃", "天雷子"];
-          s.magicTreasure = pool[Math.floor(Math.random() * pool.length)];
-          s.time += 1;
-          addLog(`你在秘境寻得法宝【${s.magicTreasure}】。它能保命，但不直接提升修为。`, "法宝");
-        }
-      },
-      { id: "prepare", label: "布置阵法与符箓", desc: "提升修炼效率，不直接涨境界。", run: (s) => {
-          s.tools.formation += 1;
-          s.tools.talisman += 1;
-          s.time += 1;
-          addLog("你完成了小型聚灵阵与护身符箓准备。后续修炼效率提高。", "筹备");
-        }
-      }
-    ];
+const WORLD_EVENTS=[
+{title:"虚天殿异象重现",text:"乱星海海眼出现同频灵压，多方势力向天星城集结。",dungeon:"探宝副本·虚天殿前厅",npcs:["青易居士","极阴祖师","乌丑"]},
+{title:"坠魔谷封印松动",text:"魔气潮汐上升，多名结丹失联。",dungeon:"探宝副本·坠魔谷外环",npcs:["南宫婉","令狐老祖","魔道巡猎队"]},
+{title:"宗门联军征召令",text:"边境大战升级，宗门发布战时号令。",dungeon:"宗门战争副本·前线补给线",npcs:["李化元","慕兰法士统领","前线执法队"]}
+];
 
-    const initialState = () => ({
-      stageId: 0,
-      stageName: STAGES[0].name,
-      quest: STAGES[0].quest,
-      realmIndex: 0,
-      xp: 0,
-      xpNeed: 100,
-      mainGongfa: "长春功",
-      spiritStone: 5,
-      magicTreasure: "无",
-      tools: { formation: 0, talisman: 1 },
-      time: 0,
-      logs: []
-    });
+const state0=()=>({
+stageId:0,stageName:STAGES[0].name,quest:STAGES[0].quest,worldHeadline:STAGES[0].world,npcs:STAGES[0].npcs,
+realmIndex:0,xp:0,xpNeed:100,mainGongfa:"长春功",spiritStone:5,magicTreasure:"无",tools:{formation:0,talisman:1},
+time:0,hookText:"",logs:[],worldEvent:null,lastLoadedId:null,worldTimerMs:0,
+hpMax:320,hp:320,mpMax:180,mp:180,atk:32,def:24,spd:18,luck:50,api:{base:"",key:"",model:""},skills:JSON.parse(JSON.stringify(HANLI_GONGFA))
+});
 
-    let state = initialState();
+let state=state0();
+let worldTickHandle=null,countdownHandle=null;
+const byId=id=>document.getElementById(id);
+const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 
-    function realmCheck(s) {
-      while (s.xp >= s.xpNeed && s.realmIndex < REALMS.length - 1) {
-        s.xp -= s.xpNeed;
-        s.realmIndex += 1;
-        s.xpNeed = Math.floor(s.xpNeed * 1.35);
-        addLog(`功法突破成功！你已踏入【${REALMS[s.realmIndex]}】。`, "突破");
-      }
-    }
+function addLog(text,tag="事件"){state.logs.unshift({text,tag,at:new Date().toLocaleTimeString()});state.logs=state.logs.slice(0,150)}
+function recalcByRealm(){
+  const hpRatio=state.hp/state.hpMax, mpRatio=state.mp/state.mpMax;
+  state.hpMax=320+state.realmIndex*70; state.mpMax=180+state.realmIndex*40;
+  state.hp=Math.round(state.hpMax*clamp(hpRatio,0,1)); state.mp=Math.round(state.mpMax*clamp(mpRatio,0,1));
+  state.atk=32+state.realmIndex*9+state.tools.formation*2; state.def=24+state.realmIndex*8+state.tools.talisman*2; state.spd=18+state.realmIndex*6;
+}
+function recoverPerTurn(){const hr=Math.ceil(state.hpMax*0.05), mr=Math.ceil(state.mpMax*0.05);state.hp=clamp(state.hp+hr,0,state.hpMax);state.mp=clamp(state.mp+mr,0,state.mpMax);addLog(`平稳恢复：气血 +${hr}，法力 +${mr}（固定5%）。`,`恢复`)}
+function applyLoss(injuryPct,manaPct){const hl=Math.ceil(state.hpMax*injuryPct), ml=Math.ceil(state.mpMax*manaPct);state.hp=clamp(state.hp-hl,0,state.hpMax);state.mp=clamp(state.mp-ml,0,state.mpMax);if(hl||ml)addLog(`本回合消耗：气血 -${hl}，法力 -${ml}。`,`消耗`)}
+function realmCheck(){while(state.xp>=state.xpNeed&&state.realmIndex<REALMS.length-1){state.xp-=state.xpNeed;state.realmIndex+=1;state.xpNeed=Math.floor(state.xpNeed*1.35);recalcByRealm();addLog(`你突破至【${REALMS[state.realmIndex]}】！`,`突破`)}}
 
-    function applyStage(stageId) {
-      const stage = STAGES.find(x => x.id === Number(stageId));
-      state = initialState();
-      state.stageId = stage.id;
-      state.stageName = stage.name;
-      state.quest = stage.quest;
-      state.spiritStone = stage.bonus.spiritStone || state.spiritStone;
-      state.magicTreasure = stage.bonus.magicTreasure || state.magicTreasure;
-      state.tools.formation = stage.bonus.formation || state.tools.formation;
-      state.tools.talisman = stage.bonus.talisman || state.tools.talisman;
-      state.logs = [{ text: stage.story, tag: "开局" }];
-      render();
-    }
+async function callStoryApi(userPrompt,temperature=.9){
+  if(!state.api.base||!state.api.key||!state.api.model) return null;
+  const sys="你是《凡人修仙传》动态叙事引擎。遵循原著修仙规则与尔虞我诈氛围，输出150-260字并给出下一钩子。";
+  const res=await fetch(`${state.api.base.replace(/\/$/,"")}/chat/completions`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${state.api.key}`},body:JSON.stringify({model:state.api.model,temperature,messages:[{role:"system",content:sys},{role:"user",content:userPrompt}]})});
+  if(!res.ok){const t=await res.text();throw new Error(`API失败 ${res.status} ${t.slice(0,80)}`)}
+  const data=await res.json();return data?.choices?.[0]?.message?.content?.trim()||null;
+}
+function localNarrative(type,extra=""){const stage=STAGES.find(s=>s.id===state.stageId);if(type==="hook")return `【节点背景】${stage.name}：${stage.world}\n【重要人物】${stage.npcs.join("、")}\n【剧情钩子】${stage.hook}`;if(type==="decision")return `你选择“${extra}”后，多方势力开始试探你的底牌。\n【新钩子】坊市出现一份残缺地图，你先验真伪还是先寻中间人？`;return "局势持续发酵，谨慎仍是第一生存法则。"}
+async function generateHook(stage){state.hookText="正在生成剧情钩子...";render();const p=`起始节点:${stage.name}\n背景:${stage.world}\n人物:${stage.npcs.join("、")}\n请1:1风格复刻环境，说明当前要事，并给待决策钩子。`;try{state.hookText=(await callStoryApi(p,.8))||localNarrative("hook")}catch(e){state.hookText=localNarrative("hook");addLog(`AI不可用，改用本地叙事：${e.message}`,"系统")}addLog(`进入节点【${stage.name}】。`,`开局`);render()}
 
-    function addLog(text, tag = "事件") {
-      state.logs.unshift({ text, tag });
-      state.logs = state.logs.slice(0, 80);
-    }
+function updateLuckByDecision(text){const h=[...text].reduce((a,c)=>a+c.charCodeAt(0),0);const swing=(h%21)-10;state.luck=clamp(state.luck+swing,1,100);addLog(`本次抉择牵动气运 ${swing>=0?"+":""}${swing}。`,`气运`)}
+async function submitDecision(){const d=byId("decisionInput").value.trim();if(!d)return addLog("请先输入决策。","提示");state.time+=1;updateLuckByDecision(d);applyLoss(Math.random()*0.12,0.06+Math.random()*0.08);const p=`节点:${state.stageName}\n决策:${d}\n境界:${REALMS[state.realmIndex]}`;try{addLog((await callStoryApi(p,.95))||localNarrative("decision",d),"AI剧情")}catch(e){addLog(localNarrative("decision",d),"剧情");addLog(`AI失败：${e.message}`,"系统")}recoverPerTurn();render()}
 
-    function render() {
-      document.getElementById("realm").textContent = REALMS[state.realmIndex];
-      document.getElementById("gongfa").textContent = state.mainGongfa;
-      document.getElementById("spiritStone").textContent = state.spiritStone;
-      document.getElementById("magicTreasure").textContent = state.magicTreasure;
-      document.getElementById("xpText").textContent = `${state.xp} / ${state.xpNeed}`;
-      document.getElementById("xpBar").style.width = `${Math.min(100, (state.xp / state.xpNeed) * 100)}%`;
-      document.getElementById("stageName").textContent = `${state.stageName}（第 ${state.time} 回合）`;
-      document.getElementById("quest").textContent = state.quest;
-      document.getElementById("toolSummary").textContent = `灵石 ${state.spiritStone} · 阵法 ${state.tools.formation} · 符箓 ${state.tools.talisman} · 法宝 ${state.magicTreasure}`;
-      document.getElementById("log").innerHTML = state.logs.map(l => `<p><span class="tag">[${l.tag}]</span> ${l.text}</p>`).join("");
-    }
+function doCultivate(){const manaCost=Math.ceil(state.mpMax*0.1);if(state.mp<manaCost)return addLog("法力不足，无法稳定运转主修功法。","提示");state.mp-=manaCost;const gain=12+state.tools.talisman*2+state.tools.formation*3;state.xp+=gain;state.time+=1;addLog(`你运转${state.mainGongfa}，法力 -${manaCost}，功法进度 +${gain}。`,`修炼`);realmCheck();recoverPerTurn();render()}
+function doMission(){state.time+=1;const gain=25+Math.floor(Math.random()*30);state.spiritStone+=gain;applyLoss(0.08+Math.random()*0.1,0.05+Math.random()*0.08);addLog(`任务完成，获得灵石 ${gain}。未直接提升修为。`,`任务`);recoverPerTurn();render()}
+function doPrepare(){state.time+=1;state.tools.formation+=1;state.tools.talisman+=1;recalcByRealm();addLog("阵法与符箓准备完成，辅助提升。","筹备");recoverPerTurn();render()}
 
-    function renderActions() {
-      const container = document.getElementById("actions");
-      container.innerHTML = "";
-      ACTIONS.forEach(a => {
-        const btn = document.createElement("button");
-        btn.innerHTML = `<strong>${a.label}</strong><br><span style='color:#94a3b8;font-size:12px'>${a.desc}</span>`;
-        btn.onclick = () => { a.run(state); render(); };
-        container.appendChild(btn);
-      });
-    }
+function getNeedRealm(skill,nextLevel){
+  if(skill.specialGate&&skill.specialGate.from+1===nextLevel){return skill.specialGate.needRealm}
+  return skill.levelReq[nextLevel] ?? skill.baseRealm;
+}
+function trainSkill(index){
+  const skill=state.skills[index]; if(!skill) return;
+  if(skill.level>=skill.maxLevel) return addLog(`【${skill.name}】已达到当前可修炼上限。`,`功法`);
+  const nextLevel=skill.level+1, needRealm=getNeedRealm(skill,nextLevel);
+  if(state.realmIndex<needRealm) return addLog(`【${skill.name}】需要突破至 ${REALMS[needRealm]} 才可修炼。`,`功法`);
+  if(skill.specialGate&&skill.specialGate.from===skill.level&&skill.specialGate.to===nextLevel&&state.realmIndex<skill.specialGate.needRealm){
+    return addLog(`${skill.specialGate.msg}。`,`功法`);
+  }
+  const manaCost=skill.mana+skill.level*8;
+  if(state.mp<manaCost) return addLog(`【${skill.name}】法力不足，需要 ${manaCost}。`,`功法`);
+  state.mp-=manaCost; state.xp+=skill.xp+skill.level*4; state.time+=1; skill.level=nextLevel; state.mainGongfa=skill.name;
+  addLog(`你将【${skill.name}】修至 Lv.${skill.level}，法力 -${manaCost}。`,`功法`);
+  realmCheck(); recoverPerTurn(); render();
+}
 
-    function saveGame() {
-      const saves = JSON.parse(localStorage.getItem("hanli_saves") || "[]");
-      const save = {
-        id: Date.now(),
-        parent: state.lastLoadedId || null,
-        title: `${state.stageName} · ${REALMS[state.realmIndex]} · 回合${state.time}`,
-        at: new Date().toLocaleString(),
-        data: JSON.parse(JSON.stringify(state))
-      };
-      saves.unshift(save);
-      localStorage.setItem("hanli_saves", JSON.stringify(saves.slice(0, 30)));
-      addLog("已完成存档，可随时从该节点分叉新的路线。", "系统");
-      render();
-      renderSaves();
-    }
+function renderSkillList(){
+  byId("skillList").innerHTML=state.skills.map((s,idx)=>{
+    const next=s.level+1;
+    const needRealm=getNeedRealm(s,next);
+    const locked=s.level>=s.maxLevel?false:state.realmIndex<needRealm;
+    const manaCost=s.mana+s.level*8;
+    const tip=s.level>=s.maxLevel?"已满级":locked?`需要突破至 ${REALMS[needRealm]} 才可修炼`:`可修炼（消耗法力 ${manaCost}）`;
+    return `<div class='skill-item'>
+      <h4>${s.name}（${s.phase}）</h4>
+      <p>${s.detail}</p>
+      <p>当前 Lv.${s.level} / ${s.maxLevel} ｜ 下一层需求：${s.level>=s.maxLevel?"无":REALMS[needRealm]}</p>
+      <p class='${locked?"lock":""}'>${tip}</p>
+      <button ${locked||s.level>=s.maxLevel?"disabled":""} onclick='trainSkill(${idx})'>修炼</button>
+    </div>`;
+  }).join("");
+}
 
-    function loadSave(id) {
-      const saves = JSON.parse(localStorage.getItem("hanli_saves") || "[]");
-      const selected = saves.find(s => s.id === id);
-      if (!selected) return;
-      state = JSON.parse(JSON.stringify(selected.data));
-      state.lastLoadedId = selected.id;
-      addLog(`已读取存档节点 #${selected.id}，你可继续改写命运分支。`, "系统");
-      render();
-    }
+function startWorldTicker(){if(worldTickHandle)clearTimeout(worldTickHandle);if(countdownHandle)clearInterval(countdownHandle);scheduleNextWorldEvent()}
+function scheduleNextWorldEvent(){const m=3+Math.floor(Math.random()*8);state.worldTimerMs=m*60000;const target=Date.now()+state.worldTimerMs;byId("nextTick").textContent=`下一次世界变动倒计时：${m} 分钟`;countdownHandle=setInterval(()=>{const left=Math.max(0,target-Date.now());byId("nextTick").textContent=`下一次世界变动倒计时：${Math.floor(left/60000)}分${String(Math.floor((left%60000)/1000)).padStart(2,"0")}秒`},1000);worldTickHandle=setTimeout(()=>{clearInterval(countdownHandle);triggerWorldEvent();scheduleNextWorldEvent()},state.worldTimerMs)}
+function triggerWorldEvent(){const e=WORLD_EVENTS[Math.floor(Math.random()*WORLD_EVENTS.length)];state.worldEvent=e;byId("worldEventText").textContent=`${e.title}：${e.text}`;addLog(`世界重大更新：${e.title}。你可忽视，或一探究竟。`,`世界`)}
+function ignoreWorldEvent(){if(!state.worldEvent)return addLog("当前无可处理的世界更新。","提示");addLog(`你选择忽视“${state.worldEvent.title}”。`,`抉择`);state.worldEvent=null;byId("worldEventText").textContent="暂无世界更新。";recoverPerTurn();render()}
+async function joinWorldEvent(){if(!state.worldEvent)return addLog("当前无可参与的世界更新。","提示");const e=state.worldEvent;applyLoss(0.12+Math.random()*0.1,0.1+Math.random()*0.12);const p=`事件:${e.title}\n描述:${e.text}\n韩立选择参与副本，生成开场与下一钩子。`;try{addLog(`【${e.dungeon}】${(await callStoryApi(p,.9))||localNarrative("event")}`,"副本")}catch(err){addLog(`【${e.dungeon}】你进入现场，发现${e.npcs[0]}已先一步布局。下一步：潜伏观察还是争夺先机？`,"副本");addLog(`副本AI生成失败：${err.message}`,"系统")}state.worldEvent=null;byId("worldEventText").textContent="暂无世界更新。";recoverPerTurn();render()}
 
-    function renderSaves() {
-      const saves = JSON.parse(localStorage.getItem("hanli_saves") || "[]");
-      const list = document.getElementById("saveList");
-      if (!saves.length) {
-        list.innerHTML = `<div class='save-item'>暂无存档</div>`;
-        return;
-      }
-      list.innerHTML = saves.map(s => `
-        <div class="save-item">
-          <div><strong>${s.title}</strong></div>
-          <div>${s.at}</div>
-          <div>存档ID: ${s.id}${s.parent ? ` · 分叉自 ${s.parent}` : ""}</div>
-          <button onclick="loadSave(${s.id})">读取并分叉</button>
-        </div>
-      `).join("");
-    }
+function render(){
+  byId("realm").textContent=REALMS[state.realmIndex];byId("gongfa").textContent=state.mainGongfa;
+  byId("atk").textContent=state.atk;byId("def").textContent=state.def;byId("spd").textContent=state.spd;byId("luck").textContent=state.luck;
+  byId("hpText").textContent=`${state.hp}/${state.hpMax}`;byId("mpText").textContent=`${state.mp}/${state.mpMax}`;byId("xpText").textContent=`${state.xp}/${state.xpNeed}`;
+  byId("hpBar").style.width=`${(state.hp/state.hpMax)*100}%`;byId("mpBar").style.width=`${(state.mp/state.mpMax)*100}%`;byId("xpBar").style.width=`${Math.min(100,(state.xp/state.xpNeed)*100)}%`;
+  byId("stageName").textContent=`${state.stageName}（第${state.time}回合）`;byId("worldHeadline").textContent=state.worldHeadline;byId("npcSummary").textContent=state.npcs.join("、");byId("hookText").textContent=state.hookText||"请选择起始节点。";
+  byId("log").innerHTML=state.logs.map(l=>`<p><span class='tag'>[${l.tag} ${l.at}]</span> ${l.text}</p>`).join("");
+  byId("apiBase").value=state.api.base;byId("apiModel").value=state.api.model;if(!byId("apiKey").value)byId("apiKey").value=state.api.key;
+  renderSkillList();
+}
 
-    function init() {
-      const startSelect = document.getElementById("startSelect");
-      STAGES.forEach(s => {
-        const op = document.createElement("option");
-        op.value = s.id;
-        op.textContent = `${s.id}. ${s.name}`;
-        startSelect.appendChild(op);
-      });
-      document.getElementById("startBtn").onclick = () => applyStage(startSelect.value);
-      document.getElementById("saveBtn").onclick = saveGame;
-      document.getElementById("refreshSaveBtn").onclick = renderSaves;
-      renderActions();
-      applyStage(0);
-      renderSaves();
-    }
+function saveGame(){const saves=JSON.parse(localStorage.getItem("hanli_saves")||"[]");const save={id:Date.now(),parent:state.lastLoadedId||null,title:`${state.stageName} · ${REALMS[state.realmIndex]} · 回合${state.time}`,at:new Date().toLocaleString(),data:JSON.parse(JSON.stringify(state))};saves.unshift(save);localStorage.setItem("hanli_saves",JSON.stringify(saves.slice(0,40)));addLog("已保存存档，可从该节点继续分叉。","系统");render();renderSaves()}
+function loadSave(id){const saves=JSON.parse(localStorage.getItem("hanli_saves")||"[]");const t=saves.find(s=>s.id===id);if(!t)return;state=JSON.parse(JSON.stringify(t.data));state.lastLoadedId=t.id;addLog(`已读取存档 #${t.id}。`,`系统`);render();startWorldTicker()}
+function renderSaves(){const saves=JSON.parse(localStorage.getItem("hanli_saves")||"[]");const el=byId("saveList");if(!saves.length){el.innerHTML="<div class='save-item'>暂无存档</div>";return}el.innerHTML=saves.map(s=>`<div class='save-item'><div><strong>${s.title}</strong></div><div>${s.at}</div><div>ID:${s.id}${s.parent?` · 分叉自 ${s.parent}`:""}</div><button onclick='loadSave(${s.id})'>读取并分叉</button></div>`).join("")}
 
-    window.loadSave = loadSave;
-    init();
-  </script>
+function applyStage(stageId){const stage=STAGES.find(s=>s.id===Number(stageId));state={...state0(),api:{...state.api}};state.stageId=stage.id;state.stageName=stage.name;state.quest=stage.quest;state.worldHeadline=stage.world;state.npcs=stage.npcs;if(stage.id>=2){state.spiritStone=50+stage.id*25;state.realmIndex=Math.min(stage.id+2,8)}recalcByRealm();addLog(`你选择了起始节点：${stage.name}。`,`开局`);generateHook(stage);render();startWorldTicker()}
+function saveApiConfig(){state.api.base=byId("apiBase").value.trim();state.api.key=byId("apiKey").value.trim();state.api.model=byId("apiModel").value.trim();localStorage.setItem("hanli_api_config",JSON.stringify(state.api));addLog("AI API 设置已保存。","系统");render()}
+function loadApiConfig(){const s=JSON.parse(localStorage.getItem("hanli_api_config")||"null");if(s)state.api=s}
+
+function init(){
+  STAGES.forEach(s=>{const op=document.createElement("option");op.value=s.id;op.textContent=`${s.id}. ${s.name}`;byId("startSelect").appendChild(op)});
+  byId("startBtn").onclick=()=>applyStage(byId("startSelect").value);byId("decisionBtn").onclick=submitDecision;byId("cultivateBtn").onclick=doCultivate;byId("missionBtn").onclick=doMission;byId("prepareBtn").onclick=doPrepare;
+  byId("ignoreEventBtn").onclick=ignoreWorldEvent;byId("joinEventBtn").onclick=joinWorldEvent;byId("saveBtn").onclick=saveGame;byId("refreshSaveBtn").onclick=renderSaves;byId("saveApiBtn").onclick=saveApiConfig;
+  loadApiConfig();applyStage(0);renderSaves();render();
+}
+
+window.loadSave=loadSave;window.trainSkill=trainSkill;init();
+</script>
 </body>
 </html>
