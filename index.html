@@ -1,9 +1,372 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Hello World</title>
-    </head>
-    <body>
-        <h1>Hello World</h1>
-    </body>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>凡人修仙传 · 文游仪表盘</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1f2937;
+      --accent: #22d3ee;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top, #1e293b, var(--bg) 35%);
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 16px;
+    }
+    .panel {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .title {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .sub { color: var(--muted); font-size: 12px; margin-top: -8px; }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .stat {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid #374151;
+    }
+    .stat strong { display:block; color: #f3f4f6; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .bar {
+      height: 8px;
+      background: #334155;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .bar > i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #06b6d4, #3b82f6);
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #475569;
+      background: #0b1220;
+      color: var(--text);
+      margin-top: 8px;
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--accent); }
+    button.secondary { background: #111827; }
+    button.danger { border-color: #7f1d1d; color: #fecaca; }
+    .layout-right {
+      display: grid;
+      gap: 16px;
+      grid-template-rows: auto auto 1fr;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid #374151;
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 105px;
+    }
+    .card h4 { margin: 0 0 6px; }
+    .card p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+    #actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .log {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px;
+      height: 360px;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .log p { margin: 0 0 8px; }
+    .tag { font-size: 12px; color: var(--warn); }
+    .save-item {
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .save-item button { margin-top: 6px; padding: 6px; font-size: 12px; }
+    @media (max-width: 980px) {
+      .wrap { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      #actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="panel">
+      <h2 class="title">韩立角色卡</h2>
+      <div class="sub">仅通过“修炼功法”提升修为，其他行为只提供辅助资源。</div>
+      <div class="stat-grid">
+        <div class="stat"><strong id="realm">凡人</strong><span>当前境界</span></div>
+        <div class="stat"><strong id="gongfa">长春功</strong><span>主修功法</span></div>
+        <div class="stat"><strong id="spiritStone">0</strong><span>灵石</span></div>
+        <div class="stat"><strong id="magicTreasure">无</strong><span>法宝</span></div>
+      </div>
+      <div class="stat" style="margin-top:10px;">
+        <strong>功法进度：<span id="xpText">0 / 100</span></strong>
+        <div class="bar"><i id="xpBar"></i></div>
+      </div>
+      <h3 class="title" style="margin-top:16px;">起始节点</h3>
+      <select id="startSelect"></select>
+      <button id="startBtn">以该节点开始新周目</button>
+      <h3 class="title" style="margin-top:16px;">存档管理</h3>
+      <button id="saveBtn">保存当前进度</button>
+      <button id="refreshSaveBtn" class="secondary">刷新存档列表</button>
+      <div id="saveList"></div>
+    </aside>
+
+    <main class="layout-right">
+      <section class="panel">
+        <h2 class="title">剧情总览仪表盘</h2>
+        <div class="cards">
+          <article class="card">
+            <h4>当前阶段</h4>
+            <p id="stageName">-</p>
+          </article>
+          <article class="card">
+            <h4>关键任务</h4>
+            <p id="quest">-</p>
+          </article>
+          <article class="card">
+            <h4>辅助资源</h4>
+            <p id="toolSummary">灵石、阵法、符箓都可提高修炼效率，但不能直接涨修为。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="title">行动决策</h2>
+        <div id="actions"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="title">故事与战报日志</h2>
+        <div class="log" id="log"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const STAGES = [
+      { id: 0, name: "小说最开头", story: "七玄门外门弟子韩立，资质平平，却意外踏入修仙路。", quest: "在凡俗夹缝中求生，寻找入道机缘。", bonus: { spiritStone: 5, talisman: 1 } },
+      { id: 1, name: "韩立打败莫大夫", story: "韩立识破莫大夫阴谋，保住性命并接触修仙残卷。", quest: "消化战果，稳住心性，建立谨慎处世原则。", bonus: { spiritStone: 20, formation: 1 } },
+      { id: 2, name: "韩立初入黄枫谷", story: "黄枫谷内门竞争激烈，韩立一面低调，一面暗中积蓄。", quest: "巩固炼气根基，搜集丹药与符箓。", bonus: { spiritStone: 50, talisman: 3 } },
+      { id: 3, name: "韩立从天南传送至乱星海", story: "空间传送后举目无亲，乱星海强者如云。", quest: "立足乱星海，寻找长期修炼据点。", bonus: { spiritStone: 90, magicTreasure: "青竹蜂云剑雏形" } },
+      { id: 4, name: "韩立从乱星海传送至阴冥之地", story: "阴冥之地危机四伏，鬼物横行，资源与风险并存。", quest: "保命优先，借险地磨炼神识与心境。", bonus: { spiritStone: 120, formation: 2 } },
+      { id: 5, name: "韩立从阴冥之地回到天南", story: "重返天南，韩立见识已非昔日可比。", quest: "整合旧识与新资源，规划更高境界突破。", bonus: { spiritStone: 150, talisman: 4 } },
+      { id: 6, name: "韩立初次加入落云宗", story: "落云宗内卧虎藏龙，韩立再次以谨慎姿态潜行。", quest: "谋求宗门资源，冲击结丹后期。", bonus: { spiritStone: 180, magicTreasure: "辟邪神雷符阵" } }
+    ];
+
+    const REALMS = ["凡人", "炼气初期", "炼气中期", "炼气后期", "筑基初期", "筑基中期", "筑基后期", "结丹初期", "结丹中期", "结丹后期", "元婴初期"];
+
+    const ACTIONS = [
+      { id: "cultivate", label: "修炼主修功法", desc: "唯一能直接提升修为等级的行动。", run: (s) => {
+          const speed = 10 + s.tools.talisman * 2 + s.tools.formation * 3;
+          s.xp += speed;
+          s.time += 1;
+          addLog(`你闭关运转${s.mainGongfa}，吸纳灵气，功法熟练度 +${speed}。`, "修炼");
+          realmCheck(s);
+        }
+      },
+      { id: "mission", label: "执行宗门任务", desc: "获取灵石与材料，不直接加修为。", run: (s) => {
+          const gain = 25 + Math.floor(Math.random() * 25);
+          s.spiritStone += gain;
+          s.time += 1;
+          addLog(`你完成了一项高风险任务，获得灵石 ${gain} 枚。修为未直接变化。`, "任务");
+        }
+      },
+      { id: "treasure", label: "搜寻法宝", desc: "有概率得到法宝，提高后续收益。", run: (s) => {
+          const pool = ["青凝镜", "乌龙夺", "金蚨子母刃", "天雷子"];
+          s.magicTreasure = pool[Math.floor(Math.random() * pool.length)];
+          s.time += 1;
+          addLog(`你在秘境寻得法宝【${s.magicTreasure}】。它能保命，但不直接提升修为。`, "法宝");
+        }
+      },
+      { id: "prepare", label: "布置阵法与符箓", desc: "提升修炼效率，不直接涨境界。", run: (s) => {
+          s.tools.formation += 1;
+          s.tools.talisman += 1;
+          s.time += 1;
+          addLog("你完成了小型聚灵阵与护身符箓准备。后续修炼效率提高。", "筹备");
+        }
+      }
+    ];
+
+    const initialState = () => ({
+      stageId: 0,
+      stageName: STAGES[0].name,
+      quest: STAGES[0].quest,
+      realmIndex: 0,
+      xp: 0,
+      xpNeed: 100,
+      mainGongfa: "长春功",
+      spiritStone: 5,
+      magicTreasure: "无",
+      tools: { formation: 0, talisman: 1 },
+      time: 0,
+      logs: []
+    });
+
+    let state = initialState();
+
+    function realmCheck(s) {
+      while (s.xp >= s.xpNeed && s.realmIndex < REALMS.length - 1) {
+        s.xp -= s.xpNeed;
+        s.realmIndex += 1;
+        s.xpNeed = Math.floor(s.xpNeed * 1.35);
+        addLog(`功法突破成功！你已踏入【${REALMS[s.realmIndex]}】。`, "突破");
+      }
+    }
+
+    function applyStage(stageId) {
+      const stage = STAGES.find(x => x.id === Number(stageId));
+      state = initialState();
+      state.stageId = stage.id;
+      state.stageName = stage.name;
+      state.quest = stage.quest;
+      state.spiritStone = stage.bonus.spiritStone || state.spiritStone;
+      state.magicTreasure = stage.bonus.magicTreasure || state.magicTreasure;
+      state.tools.formation = stage.bonus.formation || state.tools.formation;
+      state.tools.talisman = stage.bonus.talisman || state.tools.talisman;
+      state.logs = [{ text: stage.story, tag: "开局" }];
+      render();
+    }
+
+    function addLog(text, tag = "事件") {
+      state.logs.unshift({ text, tag });
+      state.logs = state.logs.slice(0, 80);
+    }
+
+    function render() {
+      document.getElementById("realm").textContent = REALMS[state.realmIndex];
+      document.getElementById("gongfa").textContent = state.mainGongfa;
+      document.getElementById("spiritStone").textContent = state.spiritStone;
+      document.getElementById("magicTreasure").textContent = state.magicTreasure;
+      document.getElementById("xpText").textContent = `${state.xp} / ${state.xpNeed}`;
+      document.getElementById("xpBar").style.width = `${Math.min(100, (state.xp / state.xpNeed) * 100)}%`;
+      document.getElementById("stageName").textContent = `${state.stageName}（第 ${state.time} 回合）`;
+      document.getElementById("quest").textContent = state.quest;
+      document.getElementById("toolSummary").textContent = `灵石 ${state.spiritStone} · 阵法 ${state.tools.formation} · 符箓 ${state.tools.talisman} · 法宝 ${state.magicTreasure}`;
+      document.getElementById("log").innerHTML = state.logs.map(l => `<p><span class="tag">[${l.tag}]</span> ${l.text}</p>`).join("");
+    }
+
+    function renderActions() {
+      const container = document.getElementById("actions");
+      container.innerHTML = "";
+      ACTIONS.forEach(a => {
+        const btn = document.createElement("button");
+        btn.innerHTML = `<strong>${a.label}</strong><br><span style='color:#94a3b8;font-size:12px'>${a.desc}</span>`;
+        btn.onclick = () => { a.run(state); render(); };
+        container.appendChild(btn);
+      });
+    }
+
+    function saveGame() {
+      const saves = JSON.parse(localStorage.getItem("hanli_saves") || "[]");
+      const save = {
+        id: Date.now(),
+        parent: state.lastLoadedId || null,
+        title: `${state.stageName} · ${REALMS[state.realmIndex]} · 回合${state.time}`,
+        at: new Date().toLocaleString(),
+        data: JSON.parse(JSON.stringify(state))
+      };
+      saves.unshift(save);
+      localStorage.setItem("hanli_saves", JSON.stringify(saves.slice(0, 30)));
+      addLog("已完成存档，可随时从该节点分叉新的路线。", "系统");
+      render();
+      renderSaves();
+    }
+
+    function loadSave(id) {
+      const saves = JSON.parse(localStorage.getItem("hanli_saves") || "[]");
+      const selected = saves.find(s => s.id === id);
+      if (!selected) return;
+      state = JSON.parse(JSON.stringify(selected.data));
+      state.lastLoadedId = selected.id;
+      addLog(`已读取存档节点 #${selected.id}，你可继续改写命运分支。`, "系统");
+      render();
+    }
+
+    function renderSaves() {
+      const saves = JSON.parse(localStorage.getItem("hanli_saves") || "[]");
+      const list = document.getElementById("saveList");
+      if (!saves.length) {
+        list.innerHTML = `<div class='save-item'>暂无存档</div>`;
+        return;
+      }
+      list.innerHTML = saves.map(s => `
+        <div class="save-item">
+          <div><strong>${s.title}</strong></div>
+          <div>${s.at}</div>
+          <div>存档ID: ${s.id}${s.parent ? ` · 分叉自 ${s.parent}` : ""}</div>
+          <button onclick="loadSave(${s.id})">读取并分叉</button>
+        </div>
+      `).join("");
+    }
+
+    function init() {
+      const startSelect = document.getElementById("startSelect");
+      STAGES.forEach(s => {
+        const op = document.createElement("option");
+        op.value = s.id;
+        op.textContent = `${s.id}. ${s.name}`;
+        startSelect.appendChild(op);
+      });
+      document.getElementById("startBtn").onclick = () => applyStage(startSelect.value);
+      document.getElementById("saveBtn").onclick = saveGame;
+      document.getElementById("refreshSaveBtn").onclick = renderSaves;
+      renderActions();
+      applyStage(0);
+      renderSaves();
+    }
+
+    window.loadSave = loadSave;
+    init();
+  </script>
+</body>
 </html>
